@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real_Mine - Статус сервера Minecraft</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Real_Mine</h1>
+            <p class="subtitle">Статус Minecraft сервера</p>
+        </header>
+        
+        <div class="server-info">
+            <div class="info-card">
+                <h2>Статус сервера</h2>
+                <div class="info-item">
+                    <span class="info-label">Статус:</span>
+                    <span class="info-value" id="status">
+                        <span class="status-indicator" id="status-indicator"></span>
+                        <span id="status-text">Загрузка...</span>
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Версия:</span>
+                    <span class="info-value" id="version">Загрузка...</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Платформа:</span>
+                    <span class="info-value" id="software">Загрузка...</span>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h2>Подключение</h2>
+                <div class="info-item">
+                    <span class="info-label">Java Edition:</span>
+                    <span class="info-value" id="java-ip">46.166.200.102:25566</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Bedrock Edition:</span>
+                    <span class="info-value" id="bedrock-ip">46.166.200.102:19132</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="motd">
+            <h2>Сообщение дня (MOTD)</h2>
+            <div class="motd-content" id="motd">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Загрузка сообщения...
+                </div>
+            </div>
+        </div>
+        
+        <div class="players">
+            <h2>Игроки онлайн</h2>
+            <div class="player-count" id="player-count">Загрузка...</div>
+            <div class="progress-bar">
+                <div class="progress" id="player-progress" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <button class="refresh-btn" id="refresh-btn">Обновить статус</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
