@@ -139,6 +139,85 @@ h1 {
     word-break: break-all;
 }
 
+/* Стили для подключения с кнопками копирования */
+.connection-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.connection-item:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.connection-info {
+    flex: 1;
+}
+
+.connection-label {
+    font-weight: bold;
+    color: #aaa;
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.connection-value {
+    color: #fff;
+    font-size: 0.95rem;
+    word-break: break-all;
+    font-family: 'Courier New', monospace;
+}
+
+.copy-btn {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+    position: relative;
+    overflow: hidden;
+    min-width: 80px;
+    height: 32px;
+}
+
+.copy-btn:hover {
+    background: #1976D2;
+    transform: translateY(-1px);
+}
+
+.copy-btn.copied {
+    background: #4CAF50;
+}
+
+.copy-text, .copied-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+}
+
+.copied-text {
+    opacity: 0;
+}
+
+.copy-btn.copied .copy-text {
+    opacity: 0;
+}
+
+.copy-btn.copied .copied-text {
+    opacity: 1;
+}
+
 .status-indicator {
     display: inline-block;
     width: 10px;
@@ -228,41 +307,35 @@ h1 {
     transition: width 0.5s ease;
 }
 
-/* Статистика онлайн */
-.online-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+/* График трафика сервера */
+.traffic-chart {
+    background: rgba(30, 30, 46, 0.8);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.stat-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
+.traffic-chart h2 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: #FF9800;
+    border-bottom: 1px solid #444;
+    padding-bottom: 6px;
+}
+
+.chart-container {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.stat-label {
-    font-size: 0.9rem;
-    color: #aaa;
-    font-weight: 500;
-}
-
-.stat-value {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #FF9800;
-    background: rgba(255, 152, 0, 0.1);
-    padding: 4px 8px;
-    border-radius: 4px;
-    min-width: 40px;
-    text-align: center;
+.chart-container iframe {
+    display: block;
+    border: none;
+    background: transparent;
 }
 
 .refresh-btn {
@@ -347,11 +420,6 @@ h1 {
         gap: 12px;
     }
     
-    .online-stats {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-    
     .info-card {
         padding: 15px;
     }
@@ -366,18 +434,23 @@ h1 {
         text-align: left;
     }
     
-    .stat-item {
+    .connection-item {
         flex-direction: column;
-        gap: 5px;
-        text-align: center;
+        align-items: flex-start;
+        gap: 8px;
     }
     
-    .stat-label {
-        font-size: 0.85rem;
+    .copy-btn {
+        margin-left: 0;
+        align-self: stretch;
     }
     
-    .stat-value {
-        font-size: 1rem;
+    .traffic-chart {
+        padding: 15px;
+    }
+    
+    .chart-container iframe {
+        height: 250px;
     }
 }
 
@@ -388,7 +461,8 @@ h1 {
     
     .info-card h2,
     .motd h2,
-    .players h2 {
+    .players h2,
+    .traffic-chart h2 {
         font-size: 1.1rem;
     }
     
@@ -406,5 +480,14 @@ h1 {
     
     #mr-vote-counter {
         font-size: 0.8rem;
+    }
+    
+    .copy-btn {
+        min-width: 70px;
+        font-size: 0.8rem;
+    }
+    
+    .chart-container iframe {
+        height: 200px;
     }
 }
