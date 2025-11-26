@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const playerCount = document.getElementById('player-count');
     const playerProgress = document.getElementById('player-progress');
     const copyButtons = document.querySelectorAll('.copy-btn');
+    const skinsContainer = document.getElementById('skins-container');
     
     // Функция для безопасного обновления текста элемента
     function safeUpdateText(element, text) {
@@ -46,6 +47,27 @@ document.addEventListener('DOMContentLoaded', function() {
             document.execCommand('copy');
             document.body.removeChild(textArea);
         });
+    }
+    
+    // Функция для отображения скинов игроков
+    function displayPlayerSkins(players) {
+        if (!players || players.length === 0) {
+            safeUpdateHTML(skinsContainer, '<div class="no-players">Нет игроков онлайн</div>');
+            return;
+        }
+        
+        let skinsHTML = '';
+        players.forEach(player => {
+            const skinUrl = `https://mc-heads.net/body/${player}`;
+            skinsHTML += `
+                <div class="player-skin">
+                    <img src="${skinUrl}" alt="Скин ${player}" onerror="this.src='https://mc-heads.net/avatar/Steve/80'">
+                    <div class="player-name">${player}</div>
+                </div>
+            `;
+        });
+        
+        safeUpdateHTML(skinsContainer, skinsHTML);
     }
     
     // Обработчики для кнопок копирования
@@ -99,6 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
         safeUpdateText(statusText, 'Загрузка...');
         safeUpdateHTML(motd, '<div class="loading"><div class="spinner"></div>Загрузка сообщения...</div>');
         safeUpdateText(playerCount, 'Загрузка...');
+        safeUpdateHTML(skinsContainer, '<div class="loading"><div class="spinner"></div>Загрузка списка игроков...</div>');
         if (playerProgress) playerProgress.style.width = '0%';
     }
     
@@ -108,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         safeUpdateText(statusText, 'Оффлайн');
         safeUpdateHTML(motd, `<div class="error-message">${message}</div>`);
         safeUpdateText(playerCount, '0/0');
+        safeUpdateHTML(skinsContainer, '<div class="no-players">Не удалось загрузить список игроков</div>');
         if (playerProgress) playerProgress.style.width = '0%';
     }
     
@@ -144,8 +168,16 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (playerProgress) {
                 playerProgress.style.width = '0%';
             }
+            
+            // Отображаем скины игроков
+            if (data.players.list && data.players.list.length > 0) {
+                displayPlayerSkins(data.players.list);
+            } else {
+                safeUpdateHTML(skinsContainer, '<div class="no-players">Нет игроков онлайн</div>');
+            }
         } else {
             safeUpdateText(playerCount, '0 / 0');
+            safeUpdateHTML(skinsContainer, '<div class="no-players">Нет игроков онлайн</div>');
             if (playerProgress) playerProgress.style.width = '0%';
         }
     }
