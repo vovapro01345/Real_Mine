@@ -87,4 +87,623 @@ body {
     background: linear-gradient(45deg, #8b7355, #6b5a45);
     padding: 15px 25px;
     border: 3px solid #5d4c3a;
-    border-radius:
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.grass-block {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 12px;
+    background: 
+        linear-gradient(45deg, #7CFC00 25%, transparent 25%),
+        linear-gradient(-45deg, #7CFC00 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #7CFC00 75%),
+        linear-gradient(-45deg, transparent 75%, #7CFC00 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    border: 2px solid #5d4c3a;
+    border-radius: 3px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #FFAA00;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #000;
+}
+
+/* Социальные сети */
+.social-links {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.social-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #0088cc, #006699);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 3px solid #005577;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 0 #004466;
+    text-shadow: 1px 1px 0 #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-link:hover {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #004466;
+    background: linear-gradient(45deg, #0099dd, #0077aa);
+}
+
+.social-link:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #004466;
+}
+
+.telegram-link {
+    background: linear-gradient(45deg, #0088cc, #006699);
+    border-color: #005577;
+    box-shadow: 0 4px 0 #004466;
+}
+
+.telegram-link:hover {
+    background: linear-gradient(45deg, #0099dd, #0077aa);
+}
+
+.social-icon {
+    font-size: 1.2rem;
+    filter: drop-shadow(1px 1px 0 #000);
+}
+
+.social-text {
+    font-size: 0.7rem;
+}
+
+/* Minecraft панели */
+.minecraft-panel {
+    background: rgba(0, 0, 0, 0.85);
+    border: 3px solid #8b7355;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 
+        0 4px 0 #6b5a45,
+        inset 0 0 15px rgba(139, 115, 85, 0.3);
+    position: relative;
+}
+
+.minecraft-panel::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+.minecraft-subtitle {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    color: #FFAA00;
+    text-shadow: 1px 1px 0 #000;
+    border-bottom: 2px solid #8b7355;
+    padding-bottom: 8px;
+    text-align: center;
+}
+
+/* Кнопки в стиле Minecraft */
+.minecraft-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #8b7355, #6b5a45);
+    color: white;
+    border: 2px solid #5d4c3a;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    box-shadow: 0 3px 0 #4a3c2a;
+    text-shadow: 1px 1px 0 #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.minecraft-button:hover {
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 #4a3c2a;
+    background: linear-gradient(to bottom, #9c8365, #7b6a55);
+}
+
+.minecraft-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 0 0 #4a3c2a;
+}
+
+/* Стили для виджетов рейтинга */
+.rating-widgets {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+.widget-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Стили для виджета голосования */
+.mr-vote-server {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+}
+
+#mr-vote-title img {
+    height: 20px;
+    width: auto;
+    filter: brightness(0) invert(1);
+}
+
+#mr-vote-counter {
+    color: #FFD700;
+    font-weight: bold;
+    font-size: 0.8rem;
+    text-shadow: 1px 1px 0 #000;
+}
+
+.server-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-card {
+    padding: 15px;
+}
+
+.info-item {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background: rgba(139, 115, 85, 0.2);
+    border-radius: 5px;
+    border: 2px solid #6b5a45;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #FFAA00;
+    font-size: 0.9rem;
+    text-shadow: 1px 1px 0 #000;
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+.info-value {
+    color: #55FF55;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #000;
+    text-align: right;
+    word-break: break-word;
+    flex: 1;
+}
+
+/* Индикатор статуса */
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 6px;
+    border: 1px solid #000;
+    box-shadow: 0 0 4px currentColor;
+    flex-shrink: 0;
+}
+
+.online {
+    background-color: #55FF55;
+    box-shadow: 0 0 8px #55FF55;
+    animation: pulse 2s infinite;
+}
+
+.offline {
+    background-color: #FF5555;
+    box-shadow: 0 0 8px #FF5555;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* Стили для подключения с кнопками копирования */
+.connection-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 10px;
+    background: rgba(139, 115, 85, 0.2);
+    border-radius: 5px;
+    border: 2px solid #6b5a45;
+    gap: 10px;
+}
+
+.connection-item:last-child {
+    margin-bottom: 0;
+}
+
+.connection-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.connection-label {
+    font-weight: bold;
+    color: #FFAA00;
+    font-size: 0.9rem;
+    text-shadow: 1px 1px 0 #000;
+    display: block;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.connection-value {
+    color: #55FF55;
+    font-size: 0.85rem;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #000;
+    word-break: break-all;
+}
+
+/* Кнопки копирования */
+.copy-btn {
+    background: linear-gradient(to bottom, #8b7355, #6b5a45);
+    color: white;
+    border: 2px solid #5d4c3a;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-family: 'Press Start 2P', cursive;
+    transition: all 0.1s ease;
+    box-shadow: 0 2px 0 #4a3c2a;
+    position: relative;
+    overflow: hidden;
+    min-width: 40px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.copy-btn:hover {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 #4a3c2a;
+}
+
+.copy-btn.copied {
+    background: linear-gradient(to bottom, #55AA55, #448844);
+    border-color: #336633;
+    box-shadow: 0 1px 0 #224422;
+}
+
+.copy-text, .copied-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.copied-text {
+    opacity: 0;
+}
+
+.copy-btn.copied .copy-text {
+    opacity: 0;
+}
+
+.copy-btn.copied .copied-text {
+    opacity: 1;
+}
+
+/* MOTD */
+.motd-content {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    line-height: 1.4;
+    min-height: 50px;
+    border: 2px solid #6b5a45;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFAA00;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #000;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* Игроки онлайн */
+.player-count {
+    font-size: 1.3rem;
+    text-align: center;
+    margin: 15px 0;
+    font-weight: bold;
+    color: #55FF55;
+    text-shadow: 1px 1px 0 #000;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.progress-bar {
+    height: 16px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 15px 0;
+    border: 2px solid #6b5a45;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, #55FF55, #7CFC00, #55FF55);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* График трафика сервера */
+.chart-container {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid #6b5a45;
+}
+
+.chart-container iframe {
+    display: block;
+    border: none;
+    background: transparent;
+}
+
+/* Загрузка */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #FFAA00;
+    text-shadow: 1px 1px 0 #000;
+}
+
+.spinner {
+    border: 3px solid rgba(139, 115, 85, 0.3);
+    border-radius: 50%;
+    border-top: 3px solid #FFAA00;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-message {
+    text-align: center;
+    color: #FF5555;
+    padding: 15px;
+    background: rgba(255, 85, 85, 0.1);
+    border-radius: 5px;
+    border: 2px solid #FF5555;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #000;
+    font-size: 0.9rem;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .minecraft-bg {
+        padding: 10px 8px;
+    }
+    
+    .container {
+        padding: 0;
+    }
+    
+    .minecraft-title {
+        font-size: 1.4rem;
+        padding: 12px 20px;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .social-links {
+        padding: 12px;
+    }
+    
+    .social-link {
+        padding: 10px 16px;
+        font-size: 0.7rem;
+    }
+    
+    .social-text {
+        font-size: 0.6rem;
+    }
+    
+    .rating-widgets {
+        gap: 10px;
+        padding: 12px;
+    }
+    
+    .minecraft-panel {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .minecraft-subtitle {
+        font-size: 0.8rem;
+        margin-bottom: 12px;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding: 6px;
+    }
+    
+    .info-label, .info-value {
+        text-align: left;
+        width: 100%;
+    }
+    
+    .connection-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    
+    .connection-info {
+        width: 100%;
+    }
+    
+    .copy-btn {
+        align-self: center;
+        min-width: 60px;
+    }
+    
+    .chart-container iframe {
+        height: 200px;
+    }
+    
+    .player-count {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .minecraft-title {
+        font-size: 1.2rem;
+        padding: 10px 15px;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .minecraft-subtitle {
+        font-size: 0.7rem;
+    }
+    
+    .social-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .social-link {
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .info-label, .info-value, .connection-label, .connection-value {
+        font-size: 0.8rem;
+    }
+    
+    .chart-container iframe {
+        height: 180px;
+    }
+    
+    .copy-btn {
+        min-width: 50px;
+        height: 28px;
+        font-size: 0.6rem;
+    }
+    
+    .player-count {
+        font-size: 1rem;
+    }
+    
+    .progress-bar {
+        height: 14px;
+    }
+}
+
+@media (max-width: 360px) {
+    .minecraft-title {
+        font-size: 1rem;
+        padding: 8px 12px;
+    }
+    
+    .rating-widgets {
+        flex-direction: column;
+    }
+    
+    .chart-container iframe {
+        height: 150px;
+    }
+}
