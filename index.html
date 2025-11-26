@@ -7,105 +7,114 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Real_Mine</h1>
-            <p class="subtitle">Статус Minecraft сервера</p>
-        </header>
-        
-        <!-- Виджеты рейтинга -->
-        <div class="rating-widgets">
-            <div class="widget-container">
-                <a href="https://minecraftrating.ru/server/381637/" target="_blank">
-                    <img src="//minecraftrating.ru/templates/theme/images/widgets/widget2.png" alt="RealMine 1.21-1.21.10 можно на java и bedrock на MinecraftRating.ru" title="RealMine 1.21-1.21.10 можно на java и bedrock на MinecraftRating.ru" width="88" height="31" />
-                </a>
-            </div>
-            <div class="widget-container">
-                <a href="https://minecraftrating.ru/" class="mr-vote-server" data-server-id="381637">
-                    <span id="mr-vote-title">
-                        <img src="//minecraftrating.ru/templates/theme/images/logo.png" alt="" />
-                    </span>
-                    <span id="mr-vote-counter">
-                        <u></u>
-                        <i></i>
-                    </span>
-                </a>
-            </div>
-        </div>
-        
-        <div class="server-info">
-            <div class="info-card">
-                <h2>Статус сервера</h2>
-                <div class="info-item">
-                    <span class="info-label">Статус:</span>
-                    <span class="info-value" id="status">
-                        <span class="status-indicator" id="status-indicator"></span>
-                        <span id="status-text">Загрузка...</span>
-                    </span>
+    <div class="minecraft-bg">
+        <div class="dirt-texture"></div>
+        <div class="container">
+            <header class="minecraft-header">
+                <div class="title-block">
+                    <h1 class="minecraft-title">Real_Mine</h1>
+                    <div class="grass-block"></div>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">Версия:</span>
-                    <span class="info-value" id="version">Загрузка...</span>
+                <p class="subtitle">Статус Minecraft сервера</p>
+            </header>
+            
+            <!-- Виджеты рейтинга -->
+            <div class="rating-widgets minecraft-panel">
+                <div class="widget-container">
+                    <a href="https://minecraftrating.ru/server/381637/" target="_blank" class="minecraft-button">
+                        <img src="//minecraftrating.ru/templates/theme/images/widgets/widget2.png" alt="RealMine 1.21-1.21.10 можно на java и bedrock на MinecraftRating.ru" title="RealMine 1.21-1.21.10 можно на java и bedrock на MinecraftRating.ru" width="88" height="31" />
+                    </a>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">Протокол:</span>
-                    <span class="info-value" id="protocol">Загрузка...</span>
+                <div class="widget-container">
+                    <a href="https://minecraftrating.ru/" class="mr-vote-server minecraft-button" data-server-id="381637">
+                        <span id="mr-vote-title">
+                            <img src="//minecraftrating.ru/templates/theme/images/logo.png" alt="" />
+                        </span>
+                        <span id="mr-vote-counter">
+                            <u></u>
+                            <i></i>
+                        </span>
+                    </a>
                 </div>
             </div>
             
-            <div class="info-card">
-                <h2>Подключение</h2>
-                <div class="connection-item">
-                    <div class="connection-info">
-                        <span class="connection-label">Java Edition:</span>
-                        <span class="connection-value" id="java-ip">46.166.200.102:25566</span>
+            <div class="server-info">
+                <div class="info-card minecraft-panel">
+                    <h2 class="minecraft-subtitle">📊 Статус сервера</h2>
+                    <div class="info-item">
+                        <span class="info-label">⚡ Статус:</span>
+                        <span class="info-value" id="status">
+                            <span class="status-indicator" id="status-indicator"></span>
+                            <span id="status-text">Загрузка...</span>
+                        </span>
                     </div>
-                    <button class="copy-btn" data-ip="46.166.200.102:25566">
-                        <span class="copy-text">Копировать</span>
-                        <span class="copied-text">Скопировано!</span>
-                    </button>
-                </div>
-                <div class="connection-item">
-                    <div class="connection-info">
-                        <span class="connection-label">Bedrock Edition:</span>
-                        <span class="connection-value" id="bedrock-ip">46.166.200.102:19132</span>
+                    <div class="info-item">
+                        <span class="info-label">🎮 Версия:</span>
+                        <span class="info-value" id="version">Загрузка...</span>
                     </div>
-                    <button class="copy-btn" data-ip="46.166.200.102:19132">
-                        <span class="copy-text">Копировать</span>
-                        <span class="copied-text">Скопировано!</span>
-                    </button>
+                    <div class="info-item">
+                        <span class="info-label">🔧 Протокол:</span>
+                        <span class="info-value" id="protocol">Загрузка...</span>
+                    </div>
+                </div>
+                
+                <div class="info-card minecraft-panel">
+                    <h2 class="minecraft-subtitle">🌐 Подключение</h2>
+                    <div class="connection-item">
+                        <div class="connection-info">
+                            <span class="connection-label">🪵 Java Edition:</span>
+                            <span class="connection-value" id="java-ip">46.166.200.102:25566</span>
+                        </div>
+                        <button class="copy-btn minecraft-button" data-ip="46.166.200.102:25566">
+                            <span class="copy-text">📋 Копировать</span>
+                            <span class="copied-text">✅ Скопировано!</span>
+                        </button>
+                    </div>
+                    <div class="connection-item">
+                        <div class="connection-info">
+                            <span class="connection-label">🪨 Bedrock Edition:</span>
+                            <span class="connection-value" id="bedrock-ip">46.166.200.102:19132</span>
+                        </div>
+                        <button class="copy-btn minecraft-button" data-ip="46.166.200.102:19132">
+                            <span class="copy-text">📋 Копировать</span>
+                            <span class="copied-text">✅ Скопировано!</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="motd">
-            <h2>Сообщение дня (MOTD)</h2>
-            <div class="motd-content" id="motd">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    Загрузка сообщения...
+            
+            <div class="motd minecraft-panel">
+                <h2 class="minecraft-subtitle">💬 Сообщение дня (MOTD)</h2>
+                <div class="motd-content" id="motd">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Загрузка сообщения...
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="players">
-            <h2>Игроки онлайн</h2>
-            <div class="player-count" id="player-count">Загрузка...</div>
-            <div class="progress-bar">
-                <div class="progress" id="player-progress" style="width: 0%"></div>
+            
+            <div class="players minecraft-panel">
+                <h2 class="minecraft-subtitle">👥 Игроки онлайн</h2>
+                <div class="player-count" id="player-count">Загрузка...</div>
+                <div class="progress-bar">
+                    <div class="progress" id="player-progress" style="width: 0%"></div>
+                </div>
             </div>
-        </div>
 
-        <!-- График трафика сервера -->
-        <div class="traffic-chart">
-            <h2>График трафика сервера</h2>
-            <div class="chart-container">
-                <iframe src="https://minecraftrating.ru/server_chart/381637/" width="100%" height="300" frameborder="0" 
-                        loading="lazy" title="График трафика сервера Real_Mine"></iframe>
+            <!-- График трафика сервера -->
+            <div class="traffic-chart minecraft-panel">
+                <h2 class="minecraft-subtitle">📈 График трафика сервера</h2>
+                <div class="chart-container">
+                    <iframe src="https://minecraftrating.ru/server_chart/381637/" width="100%" height="300" frameborder="0" 
+                            loading="lazy" title="График трафика сервера Real_Mine"></iframe>
+                </div>
             </div>
+            
+            <button class="refresh-btn minecraft-button" id="refresh-btn">
+                <span class="button-icon">🔄</span>
+                Обновить статус
+            </button>
         </div>
-        
-        <button class="refresh-btn" id="refresh-btn">Обновить статус</button>
     </div>
 
     <script src="script.js"></script>
