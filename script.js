@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Получаем элементы DOM
     const statusIndicator = document.getElementById('status-indicator');
     const statusText = document.getElementById('status-text');
-    const version = document.getElementById('version');
     const lastUpdate = document.getElementById('last-update');
     const motd = document.getElementById('motd');
     const playerCount = document.getElementById('player-count');
@@ -26,7 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Функция для получения времени последнего обновления
     function getLastUpdateTime() {
         const now = new Date();
-        return now.toLocaleTimeString('ru-RU');
+        return now.toLocaleTimeString('ru-RU', { 
+            hour: '2-digit', 
+            minute: '2-digit',
+            second: '2-digit'
+        });
     }
     
     // Функция для копирования IP в буфер обмена
@@ -83,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('Ошибка при получении данных:', error);
-                setErrorState('Ошибка подключения к API');
+                setErrorState('Ошибка подключения');
                 
                 // Обновляем время последнего обновления даже при ошибке
                 safeUpdateText(lastUpdate, getLastUpdateTime() + ' (ошибка)');
