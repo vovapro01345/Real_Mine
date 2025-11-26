@@ -10,6 +10,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const refreshBtn = document.getElementById('refresh-btn');
     const copyButtons = document.querySelectorAll('.copy-btn');
     
+    // Функция для безопасного обновления текста элемента
+    function safeUpdateText(element, text) {
+        if (element) {
+            element.textContent = text;
+        }
+    }
+    
+    // Функция для безопасного обновления HTML элемента
+    function safeUpdateHTML(element, html) {
+        if (element) {
+            element.innerHTML = html;
+        }
+    }
+    
     // Функция для копирования IP в буфер обмена
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
@@ -67,24 +81,24 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Функция установки состояния загрузки
     function setLoadingState() {
-        statusIndicator.className = 'status-indicator';
-        statusText.textContent = 'Загрузка...';
-        version.textContent = 'Загрузка...';
-        protocol.textContent = 'Загрузка...';
-        motd.innerHTML = '<div class="loading"><div class="spinner"></div>Загрузка сообщения...</div>';
-        playerCount.textContent = 'Загрузка...';
-        playerProgress.style.width = '0%';
+        if (statusIndicator) statusIndicator.className = 'status-indicator';
+        safeUpdateText(statusText, 'Загрузка...');
+        safeUpdateText(version, 'Загрузка...');
+        safeUpdateText(protocol, 'Загрузка...');
+        safeUpdateHTML(motd, '<div class="loading"><div class="spinner"></div>Загрузка сообщения...</div>');
+        safeUpdateText(playerCount, 'Загрузка...');
+        if (playerProgress) playerProgress.style.width = '0%';
     }
     
     // Функция установки состояния ошибки
     function setErrorState(message) {
-        statusIndicator.className = 'status-indicator offline';
-        statusText.textContent = 'Ошибка';
-        version.textContent = 'Неизвестно';
-        protocol.textContent = 'Неизвестно';
-        motd.innerHTML = `<div class="error-message">${message}</div>`;
-        playerCount.textContent = '0/0';
-        playerProgress.style.width = '0%';
+        if (statusIndicator) statusIndicator.className = 'status-indicator offline';
+        safeUpdateText(statusText, 'Ошибка');
+        safeUpdateText(version, 'Неизвестно');
+        safeUpdateText(protocol, 'Неизвестно');
+        safeUpdateHTML(motd, `<div class="error-message">${message}</div>`);
+        safeUpdateText(playerCount, '0/0');
+        if (playerProgress) playerProgress.style.width = '0%';
     }
     
     // Функция для обновления информации о сервере
@@ -93,51 +107,51 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Обновляем статус
         if (data.status === 'success' && data.online) {
-            statusIndicator.className = 'status-indicator online';
-            statusText.textContent = 'Онлайн';
+            if (statusIndicator) statusIndicator.className = 'status-indicator online';
+            safeUpdateText(statusText, 'Онлайн');
         } else {
-            statusIndicator.className = 'status-indicator offline';
-            statusText.textContent = 'Оффлайн';
+            if (statusIndicator) statusIndicator.className = 'status-indicator offline';
+            safeUpdateText(statusText, 'Оффлайн');
         }
         
         // Обновляем версию и протокол
         if (data.server && data.server.name) {
-            version.textContent = data.server.name;
+            safeUpdateText(version, data.server.name);
         } else {
-            version.textContent = 'Неизвестно';
+            safeUpdateText(version, 'Неизвестно');
         }
         
         if (data.server && data.server.protocol) {
-            protocol.textContent = data.server.protocol;
+            safeUpdateText(protocol, data.server.protocol.toString());
         } else {
-            protocol.textContent = 'Неизвестно';
+            safeUpdateText(protocol, 'Неизвестно');
         }
         
         // Обновляем MOTD
         if (data.motd_json) {
-            motd.textContent = data.motd_json;
+            safeUpdateText(motd, data.motd_json);
         } else if (data.motd) {
-            motd.textContent = data.motd;
+            safeUpdateText(motd, data.motd);
         } else {
-            motd.innerHTML = '<div style="text-align: center; color: #aaa;">Нет сообщения</div>';
+            safeUpdateHTML(motd, '<div style="text-align: center; color: #aaa;">Нет сообщения</div>');
         }
         
         // Обновляем информацию об игроках
         if (data.players) {
             const online = data.players.now || 0;
             const max = data.players.max || 0;
-            playerCount.textContent = `${online} / ${max}`;
+            safeUpdateText(playerCount, `${online} / ${max}`);
             
             // Обновляем прогресс-бар
-            if (max > 0) {
+            if (playerProgress && max > 0) {
                 const percentage = Math.min((online / max) * 100, 100);
                 playerProgress.style.width = `${percentage}%`;
-            } else {
+            } else if (playerProgress) {
                 playerProgress.style.width = '0%';
             }
         } else {
-            playerCount.textContent = '0 / 0';
-            playerProgress.style.width = '0%';
+            safeUpdateText(playerCount, '0 / 0');
+            if (playerProgress) playerProgress.style.width = '0%';
         }
     }
     
@@ -145,7 +159,9 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchServerStatus();
     
     // Обновляем статус при нажатии на кнопку
-    refreshBtn.addEventListener('click', fetchServerStatus);
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', fetchServerStatus);
+    }
     
     // Автоматическое обновление каждые 30 секунд
     setInterval(fetchServerStatus, 30000);
