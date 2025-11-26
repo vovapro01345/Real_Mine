@@ -48,20 +48,32 @@
                     <span class="info-value" id="version">Загрузка...</span>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Платформа:</span>
-                    <span class="info-value" id="software">Загрузка...</span>
+                    <span class="info-label">Протокол:</span>
+                    <span class="info-value" id="protocol">Загрузка...</span>
                 </div>
             </div>
             
             <div class="info-card">
                 <h2>Подключение</h2>
-                <div class="info-item">
-                    <span class="info-label">Java Edition:</span>
-                    <span class="info-value" id="java-ip">46.166.200.102:25566</span>
+                <div class="connection-item">
+                    <div class="connection-info">
+                        <span class="connection-label">Java Edition:</span>
+                        <span class="connection-value" id="java-ip">46.166.200.102:25566</span>
+                    </div>
+                    <button class="copy-btn" data-ip="46.166.200.102:25566">
+                        <span class="copy-text">Копировать</span>
+                        <span class="copied-text">Скопировано!</span>
+                    </button>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">Bedrock Edition:</span>
-                    <span class="info-value" id="bedrock-ip">46.166.200.102:19132</span>
+                <div class="connection-item">
+                    <div class="connection-info">
+                        <span class="connection-label">Bedrock Edition:</span>
+                        <span class="connection-value" id="bedrock-ip">46.166.200.102:19132</span>
+                    </div>
+                    <button class="copy-btn" data-ip="46.166.200.102:19132">
+                        <span class="copy-text">Копировать</span>
+                        <span class="copied-text">Скопировано!</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -82,17 +94,14 @@
             <div class="progress-bar">
                 <div class="progress" id="player-progress" style="width: 0%"></div>
             </div>
-            
-            <!-- Статистика онлайн -->
-            <div class="online-stats">
-                <div class="stat-item">
-                    <span class="stat-label">Макс. онлайн сегодня:</span>
-                    <span class="stat-value" id="max-today">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Макс. онлайн за всё время:</span>
-                    <span class="stat-value" id="max-alltime">0</span>
-                </div>
+        </div>
+
+        <!-- График трафика сервера -->
+        <div class="traffic-chart">
+            <h2>График трафика сервера</h2>
+            <div class="chart-container">
+                <iframe src="https://minecraftrating.ru/server_chart/381637/" width="100%" height="300" frameborder="0" 
+                        loading="lazy" title="График трафика сервера Real_Mine"></iframe>
             </div>
         </div>
         
