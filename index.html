@@ -112,39 +112,13 @@
                 </div>
             </div>
 
-            <!-- Просмотр скинов игроков -->
-            <div class="skin-viewer minecraft-panel">
-                <h2 class="minecraft-subtitle">🎭 Просмотр скинов игроков</h2>
-                <div class="skin-search">
-                    <input type="text" id="skin-search-input" placeholder="Введите ник игрока..." class="skin-input">
-                    <button id="skin-search-btn" class="minecraft-button">
-                        <span class="button-icon">🔍</span>
-                        Найти скин
-                    </button>
-                </div>
-                <div class="skin-display">
-                    <div class="skin-preview">
-                        <img id="skin-image" src="" alt="Скин игрока" class="skin-image">
-                        <div class="skin-info" id="skin-info">
-                            Введите ник игрока для просмотра скина
-                        </div>
-                    </div>
-                    <div class="skin-examples">
-                        <h3 class="skin-examples-title">Примеры игроков:</h3>
-                        <div class="skin-examples-list">
-                            <div class="skin-example" data-player="Notch">
-                                <img src="https://mc-heads.net/avatar/Notch/40" alt="Notch">
-                                <span>Notch</span>
-                            </div>
-                            <div class="skin-example" data-player="Dream">
-                                <img src="https://mc-heads.net/avatar/Dream/40" alt="Dream">
-                                <span>Dream</span>
-                            </div>
-                            <div class="skin-example" data-player="Technoblade">
-                                <img src="https://mc-heads.net/avatar/Technoblade/40" alt="Technoblade">
-                                <span>Technoblade</span>
-                            </div>
-                        </div>
+            <!-- Скины игроков онлайн -->
+            <div class="online-skins minecraft-panel">
+                <h2 class="minecraft-subtitle">🎭 Игроки онлайн</h2>
+                <div class="skins-container" id="skins-container">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Загрузка списка игроков...
                     </div>
                 </div>
             </div>
