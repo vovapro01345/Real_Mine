@@ -8,10 +8,65 @@ document.addEventListener('DOMContentLoaded', function() {
     const playerCount = document.getElementById('player-count');
     const playerProgress = document.getElementById('player-progress');
     const refreshBtn = document.getElementById('refresh-btn');
+    const maxTodayElement = document.getElementById('max-today');
+    const maxAllTimeElement = document.getElementById('max-alltime');
     
     // Устанавливаем IP-адреса
     document.getElementById('java-ip').textContent = '46.166.200.102:25566';
     document.getElementById('bedrock-ip').textContent = '46.166.200.102:19132';
+    
+    // Инициализация данных в LocalStorage
+    function initializeStorage() {
+        if (!localStorage.getItem('maxAllTime')) {
+            localStorage.setItem('maxAllTime', '0');
+        }
+        if (!localStorage.getItem('maxToday')) {
+            localStorage.setItem('maxToday', '0');
+        }
+        if (!localStorage.getItem('lastUpdateDate')) {
+            localStorage.setItem('lastUpdateDate', getCurrentDate());
+        }
+        
+        // Проверяем, не сменился ли день
+        const lastUpdateDate = localStorage.getItem('lastUpdateDate');
+        const currentDate = getCurrentDate();
+        
+        if (lastUpdateDate !== currentDate) {
+            // Новый день - сбрасываем максимум за сегодня
+            localStorage.setItem('maxToday', '0');
+            localStorage.setItem('lastUpdateDate', currentDate);
+        }
+    }
+    
+    // Получение текущей даты в формате YYYY-MM-DD
+    function getCurrentDate() {
+        return new Date().toISOString().split('T')[0];
+    }
+    
+    // Обновление статистики онлайн
+    function updateOnlineStats(currentOnline) {
+        const currentMaxToday = parseInt(localStorage.getItem('maxToday')) || 0;
+        const currentMaxAllTime = parseInt(localStorage.getItem('maxAllTime')) || 0;
+        
+        let updatedToday = currentMaxToday;
+        let updatedAllTime = currentMaxAllTime;
+        
+        // Обновляем максимум за сегодня
+        if (currentOnline > currentMaxToday) {
+            updatedToday = currentOnline;
+            localStorage.setItem('maxToday', updatedToday.toString());
+        }
+        
+        // Обновляем максимум за всё время
+        if (currentOnline > currentMaxAllTime) {
+            updatedAllTime = currentOnline;
+            localStorage.setItem('maxAllTime', updatedAllTime.toString());
+        }
+        
+        // Обновляем отображение
+        maxTodayElement.textContent = updatedToday;
+        maxAllTimeElement.textContent = updatedAllTime;
+    }
     
     // Функция для получения данных о сервере
     function fetchServerStatus() {
@@ -97,11 +152,21 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 playerProgress.style.width = '0%';
             }
+            
+            // Обновляем статистику онлайн
+            if (data.online) {
+                updateOnlineStats(online);
+            }
         } else {
             playerCount.textContent = '0 / 0';
             playerProgress.style.width = '0%';
         }
     }
+    
+    // Инициализируем хранилище и загружаем начальные значения
+    initializeStorage();
+    maxTodayElement.textContent = localStorage.getItem('maxToday') || '0';
+    maxAllTimeElement.textContent = localStorage.getItem('maxAllTime') || '0';
     
     // Загружаем статус при загрузке страницы
     fetchServerStatus();
