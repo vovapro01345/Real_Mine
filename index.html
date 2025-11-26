@@ -50,11 +50,11 @@
                     </div>
                     <div class="info-item">
                         <span class="info-label">🎮 Версия:</span>
-                        <span class="info-value" id="version">Загрузка...</span>
+                        <span class="info-value" id="version">1.21.X-1.21.10</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">🔧 Протокол:</span>
-                        <span class="info-value" id="protocol">Загрузка...</span>
+                        <span class="info-label">🕐 Последнее обновление:</span>
+                        <span class="info-value" id="last-update">Только что</span>
                     </div>
                 </div>
                 
@@ -109,11 +109,14 @@
                             loading="lazy" title="График трафика сервера Real_Mine"></iframe>
                 </div>
             </div>
-            
-            <button class="refresh-btn minecraft-button" id="refresh-btn">
-                <span class="button-icon">🔄</span>
-                Обновить статус
-            </button>
+
+            <!-- Автообновление статуса -->
+            <div class="auto-update minecraft-panel">
+                <div class="update-info">
+                    <span class="update-label">🔄 Автообновление:</span>
+                    <span class="update-value">Каждые 30 секунд</span>
+                </div>
+            </div>
         </div>
     </div>
 
