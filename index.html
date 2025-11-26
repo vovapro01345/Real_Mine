@@ -13,6 +13,26 @@
             <p class="subtitle">Статус Minecraft сервера</p>
         </header>
         
+        <!-- Виджеты рейтинга -->
+        <div class="rating-widgets">
+            <div class="widget-container">
+                <a href="https://minecraftrating.ru/server/381637/" target="_blank">
+                    <img src="//minecraftrating.ru/templates/theme/images/widgets/widget2.png" alt="RealMine 1.21-1.21.10 можно на java и bedrock на MinecraftRating.ru" title="RealMine 1.21-1.21.10 можно на java и bedrock на MinecraftRating.ru" width="88" height="31" />
+                </a>
+            </div>
+            <div class="widget-container">
+                <a href="https://minecraftrating.ru/" class="mr-vote-server" data-server-id="381637">
+                    <span id="mr-vote-title">
+                        <img src="//minecraftrating.ru/templates/theme/images/logo.png" alt="" />
+                    </span>
+                    <span id="mr-vote-counter">
+                        <u></u>
+                        <i></i>
+                    </span>
+                </a>
+            </div>
+        </div>
+        
         <div class="server-info">
             <div class="info-card">
                 <h2>Статус сервера</h2>
@@ -62,11 +82,24 @@
             <div class="progress-bar">
                 <div class="progress" id="player-progress" style="width: 0%"></div>
             </div>
+            
+            <!-- Статистика онлайн -->
+            <div class="online-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Макс. онлайн сегодня:</span>
+                    <span class="stat-value" id="max-today">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Макс. онлайн за всё время:</span>
+                    <span class="stat-value" id="max-alltime">0</span>
+                </div>
+            </div>
         </div>
         
         <button class="refresh-btn" id="refresh-btn">Обновить статус</button>
     </div>
 
     <script src="script.js"></script>
+    <script type="text/javascript" src="//minecraftrating.ru/widgets_api/vote/vote_widget.js?v=400"></script>
 </body>
 </html>
