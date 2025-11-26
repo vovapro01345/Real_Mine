@@ -3,11 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusIndicator = document.getElementById('status-indicator');
     const statusText = document.getElementById('status-text');
     const version = document.getElementById('version');
-    const protocol = document.getElementById('protocol');
+    const lastUpdate = document.getElementById('last-update');
     const motd = document.getElementById('motd');
     const playerCount = document.getElementById('player-count');
     const playerProgress = document.getElementById('player-progress');
-    const refreshBtn = document.getElementById('refresh-btn');
     const copyButtons = document.querySelectorAll('.copy-btn');
     
     // Функция для безопасного обновления текста элемента
@@ -22,6 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (element) {
             element.innerHTML = html;
         }
+    }
+    
+    // Функция для получения времени последнего обновления
+    function getLastUpdateTime() {
+        const now = new Date();
+        return now.toLocaleTimeString('ru-RU');
     }
     
     // Функция для копирования IP в буфер обмена
@@ -72,10 +77,16 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log('Данные получены:', data);
                 updateServerInfo(data);
+                
+                // Обновляем время последнего обновления
+                safeUpdateText(lastUpdate, getLastUpdateTime());
             })
             .catch(error => {
                 console.error('Ошибка при получении данных:', error);
                 setErrorState('Ошибка подключения к API');
+                
+                // Обновляем время последнего обновления даже при ошибке
+                safeUpdateText(lastUpdate, getLastUpdateTime() + ' (ошибка)');
             });
     }
     
@@ -83,8 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function setLoadingState() {
         if (statusIndicator) statusIndicator.className = 'status-indicator';
         safeUpdateText(statusText, 'Загрузка...');
-        safeUpdateText(version, 'Загрузка...');
-        safeUpdateText(protocol, 'Загрузка...');
         safeUpdateHTML(motd, '<div class="loading"><div class="spinner"></div>Загрузка сообщения...</div>');
         safeUpdateText(playerCount, 'Загрузка...');
         if (playerProgress) playerProgress.style.width = '0%';
@@ -94,8 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function setErrorState(message) {
         if (statusIndicator) statusIndicator.className = 'status-indicator offline';
         safeUpdateText(statusText, 'Ошибка');
-        safeUpdateText(version, 'Неизвестно');
-        safeUpdateText(protocol, 'Неизвестно');
         safeUpdateHTML(motd, `<div class="error-message">${message}</div>`);
         safeUpdateText(playerCount, '0/0');
         if (playerProgress) playerProgress.style.width = '0%';
@@ -112,19 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             if (statusIndicator) statusIndicator.className = 'status-indicator offline';
             safeUpdateText(statusText, 'Оффлайн');
-        }
-        
-        // Обновляем версию и протокол
-        if (data.server && data.server.name) {
-            safeUpdateText(version, data.server.name);
-        } else {
-            safeUpdateText(version, 'Неизвестно');
-        }
-        
-        if (data.server && data.server.protocol) {
-            safeUpdateText(protocol, data.server.protocol.toString());
-        } else {
-            safeUpdateText(protocol, 'Неизвестно');
         }
         
         // Обновляем MOTD
@@ -157,11 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Загружаем статус при загрузке страницы
     fetchServerStatus();
-    
-    // Обновляем статус при нажатии на кнопку
-    if (refreshBtn) {
-        refreshBtn.addEventListener('click', fetchServerStatus);
-    }
     
     // Автоматическое обновление каждые 30 секунд
     setInterval(fetchServerStatus, 30000);
