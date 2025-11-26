@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Показываем индикатор загрузки
         setLoadingState();
         
-        // Запрашиваем данные с нового API
+        // Запрашиваем данные с API
         fetch('https://mcapi.us/server/status?ip=46.166.200.102:25566')
             .then(response => {
                 if (!response.ok) {
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (data.motd) {
             safeUpdateText(motd, data.motd);
         } else {
-            safeUpdateHTML(motd, '<div style="text-align: center; color: #aaa;">Нет сообщения</div>');
+            safeUpdateHTML(motd, '<div style="text-align: center; color: #FFAA00;">Нет сообщения</div>');
         }
         
         // Обновляем информацию об игроках
