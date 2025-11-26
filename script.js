@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Показываем индикатор загрузки
         setLoadingState();
         
-        // Запрашиваем данные с API
-        fetch('https://mcapi.us/server/status?ip=46.166.200.102:25566')
+        // Используем оригинальный API который точно работает
+        fetch('https://api.mcsrvstat.us/3/46.166.200.102:25566')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('Ошибка при получении данных:', error);
-                setErrorState('Ошибка подключения');
+                setErrorState('Сервер не отвечает');
                 
                 // Обновляем время последнего обновления даже при ошибке
                 safeUpdateText(lastUpdate, getLastUpdateTime() + ' (ошибка)');
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Функция установки состояния ошибки
     function setErrorState(message) {
         if (statusIndicator) statusIndicator.className = 'status-indicator offline';
-        safeUpdateText(statusText, 'Ошибка');
+        safeUpdateText(statusText, 'Оффлайн');
         safeUpdateHTML(motd, `<div class="error-message">${message}</div>`);
         safeUpdateText(playerCount, '0/0');
         if (playerProgress) playerProgress.style.width = '0%';
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Обновление информации:', data);
         
         // Обновляем статус
-        if (data.status === 'success' && data.online) {
+        if (data.online) {
             if (statusIndicator) statusIndicator.className = 'status-indicator online';
             safeUpdateText(statusText, 'Онлайн');
         } else {
@@ -125,17 +125,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Обновляем MOTD
-        if (data.motd_json) {
-            safeUpdateText(motd, data.motd_json);
-        } else if (data.motd) {
-            safeUpdateText(motd, data.motd);
+        if (data.motd && data.motd.clean) {
+            safeUpdateText(motd, data.motd.clean.join(' '));
         } else {
             safeUpdateHTML(motd, '<div style="text-align: center; color: #FFAA00;">Нет сообщения</div>');
         }
         
         // Обновляем информацию об игроках
         if (data.players) {
-            const online = data.players.now || 0;
+            const online = data.players.online || 0;
             const max = data.players.max || 0;
             safeUpdateText(playerCount, `${online} / ${max}`);
             
