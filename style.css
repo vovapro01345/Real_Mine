@@ -514,68 +514,6 @@ body {
     100% { left: 100%; }
 }
 
-/* Скины игроков онлайн */
-.online-skins {
-    padding: 20px;
-}
-
-.skins-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.player-skin {
-    text-align: center;
-    background: rgba(139, 115, 85, 0.2);
-    padding: 15px;
-    border-radius: 8px;
-    border: 2px solid #6b5a45;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.player-skin:hover {
-    transform: translateY(-3px);
-    background: rgba(139, 115, 85, 0.4);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.player-skin img {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    border: 2px solid #8b7355;
-    background: 
-        linear-gradient(45deg, #3a3a3a 25%, transparent 25%),
-        linear-gradient(-45deg, #3a3a3a 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #3a3a3a 75%),
-        linear-gradient(-45deg, transparent 75%, #3a3a3a 75%);
-    background-size: 8px 8px;
-    background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
-    margin-bottom: 8px;
-}
-
-.player-name {
-    color: #55FF55;
-    font-weight: bold;
-    text-shadow: 1px 1px 0 #000;
-    font-size: 0.8rem;
-    word-break: break-word;
-    font-family: 'Press Start 2P', cursive;
-}
-
-.no-players {
-    text-align: center;
-    color: #FFAA00;
-    padding: 30px;
-    font-style: italic;
-    text-shadow: 1px 1px 0 #000;
-    grid-column: 1 / -1;
-}
-
 /* График трафика сервера */
 .chart-container {
     background: rgba(0, 0, 0, 0.5);
@@ -596,7 +534,6 @@ body {
     padding: 20px;
     color: #FFAA00;
     text-shadow: 1px 1px 0 #000;
-    grid-column: 1 / -1;
 }
 
 .spinner {
@@ -624,7 +561,6 @@ body {
     font-weight: bold;
     text-shadow: 1px 1px 0 #000;
     font-size: 0.9rem;
-    grid-column: 1 / -1;
 }
 
 /* Адаптивность для мобильных устройств */
@@ -701,20 +637,6 @@ body {
         min-width: 60px;
     }
     
-    .skins-container {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 10px;
-    }
-    
-    .player-skin img {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .player-name {
-        font-size: 0.7rem;
-    }
-    
     .chart-container iframe {
         height: 200px;
     }
@@ -752,24 +674,6 @@ body {
         font-size: 0.8rem;
     }
     
-    .skins-container {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-        gap: 8px;
-    }
-    
-    .player-skin {
-        padding: 10px;
-    }
-    
-    .player-skin img {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .player-name {
-        font-size: 0.6rem;
-    }
-    
     .chart-container iframe {
         height: 180px;
     }
@@ -797,10 +701,6 @@ body {
     
     .rating-widgets {
         flex-direction: column;
-    }
-    
-    .skins-container {
-        grid-template-columns: repeat(3, 1fr);
     }
     
     .chart-container iframe {
