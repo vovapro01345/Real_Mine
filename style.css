@@ -248,6 +248,11 @@ body {
     box-shadow: 0 0 0 #4a3c2a;
 }
 
+.button-icon {
+    margin-right: 8px;
+    font-size: 1rem;
+}
+
 /* Стили для виджетов рейтинга */
 .rating-widgets {
     display: flex;
