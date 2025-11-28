@@ -23,128 +23,157 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Запускаем автоматическое обновление
     startAutoRefresh();
-    
-    // Инициализация других компонентов страницы
-    initPageComponents();
 });
 
-// Основная функция получения статуса сервера
+// Основная функция получения статуса сервера с альтернативными API
 async function fetchServerStatus() {
     console.log('Проверка статуса сервера...');
     
     // Показываем индикатор загрузки
     showLoadingState();
     
-    try {
-        // Пробуем основной API (версия 3)
-        let apiUrl = `https://api.mcsrvstat.us/3/${SERVER_IP}:${SERVER_PORT}`;
-        console.log('Подключение к API:', apiUrl);
-        
-        const response = await fetchWithTimeout(apiUrl, 10000);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ошибка! статус: ${response.status}`);
+    // Список альтернативных API в порядке приоритета
+    const apiEndpoints = [
+        {
+            name: 'mcstatus.io',
+            url: `https://api.mcstatus.io/v2/status/java/${SERVER_IP}:${SERVER_PORT}`,
+            parser: parseMcStatusIO
+        },
+        {
+            name: 'mcapi.us',
+            url: `https://mcapi.us/server/status?ip=${SERVER_IP}&port=${SERVER_PORT}`,
+            parser: parseMcApiUS
+        },
+        {
+            name: 'mcsrvstat.us v2',
+            url: `https://api.mcsrvstat.us/2/${SERVER_IP}:${SERVER_PORT}`,
+            parser: parseMcSrvStat
+        },
+        {
+            name: 'mcsrvstat.us v3',
+            url: `https://api.mcsrvstat.us/3/${SERVER_IP}:${SERVER_PORT}`,
+            parser: parseMcSrvStat
         }
+    ];
 
-        const data = await response.json();
-        console.log('Данные получены:', data);
-        
-        updateServerStatus(data);
-        
-    } catch (error) {
-        console.error('Ошибка основного API:', error);
-        
-        // Пробуем альтернативный API (версия 2)
+    for (const endpoint of apiEndpoints) {
         try {
-            console.log('Пробуем альтернативный API v2...');
-            const backupUrl = `https://api.mcsrvstat.us/2/${SERVER_IP}:${SERVER_PORT}`;
-            const backupResponse = await fetchWithTimeout(backupUrl, 10000);
+            console.log(`Пробуем API: ${endpoint.name}`);
+            const data = await fetchAPI(endpoint.url);
             
-            if (backupResponse.ok) {
-                const backupData = await backupResponse.json();
-                console.log('Данные от альтернативного API:', backupData);
-                updateServerStatus(backupData);
-                return;
-            }
-        } catch (backupError) {
-            console.error('Альтернативный API тоже не сработал:', backupError);
-            
-            // Пробуем третий вариант API
-            try {
-                console.log('Пробуем API mcstatus.io...');
-                const thirdPartyResponse = await fetchWithTimeout(
-                    `https://api.mcstatus.io/v2/status/java/${SERVER_IP}:${SERVER_PORT}`,
-                    10000
-                );
-                
-                if (thirdPartyResponse.ok) {
-                    const thirdPartyData = await thirdPartyResponse.json();
-                    console.log('Данные от mcstatus.io:', thirdPartyData);
-                    updateServerStatusFromMcStatus(thirdPartyData);
+            if (data) {
+                const serverData = endpoint.parser(data);
+                if (serverData) {
+                    updateServerStatus(serverData);
+                    console.log(`Успешно получены данные от ${endpoint.name}`);
                     return;
                 }
-            } catch (thirdError) {
-                console.error('Все API не сработали:', thirdError);
             }
+        } catch (error) {
+            console.warn(`API ${endpoint.name} не сработало:`, error.message);
+            continue;
         }
-        
-        // Если все API не работают
-        showErrorState();
     }
+    
+    // Если все API не сработали
+    showErrorState();
 }
 
-// Функция fetch с таймаутом
-function fetchWithTimeout(url, timeout = 10000) {
-    return new Promise((resolve, reject) => {
+// Универсальная функция для запросов к API
+async function fetchAPI(url) {
+    try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => {
-            controller.abort();
-            reject(new Error('Таймаут запроса'));
-        }, timeout);
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
         
-        fetch(url, { 
+        const response = await fetch(url, {
             signal: controller.signal,
             headers: {
                 'Accept': 'application/json',
                 'User-Agent': 'MinecraftServerStatus/1.0'
             }
-        })
-        .then(response => {
-            clearTimeout(timeoutId);
-            resolve(response);
-        })
-        .catch(error => {
-            clearTimeout(timeoutId);
-            reject(error);
         });
-    });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Таймаут запроса');
+        }
+        throw error;
+    }
 }
 
-// Обновление статуса из основного API
-function updateServerStatus(data) {
+// Парсер для mcstatus.io
+function parseMcStatusIO(data) {
+    if (!data || typeof data.online !== 'boolean') return null;
+    
+    return {
+        online: data.online,
+        players: {
+            online: data.players?.online || 0,
+            max: data.players?.max || 0
+        },
+        version: data.version?.name_clean || data.version?.name || 'Неизвестно',
+        motd: data.motd?.clean || ''
+    };
+}
+
+// Парсер для mcapi.us
+function parseMcApiUS(data) {
+    if (!data || !data.server || typeof data.online !== 'boolean') return null;
+    
+    return {
+        online: data.online,
+        players: {
+            online: data.players?.now || 0,
+            max: data.players?.max || 0
+        },
+        version: data.server?.name || 'Неизвестно',
+        motd: data.motd || ''
+    };
+}
+
+// Парсер для mcsrvstat.us
+function parseMcSrvStat(data) {
+    if (!data || typeof data.online !== 'boolean') return null;
+    
+    return {
+        online: data.online,
+        players: {
+            online: data.players?.online || 0,
+            max: data.players?.max || 0
+        },
+        version: data.version || 'Неизвестно',
+        motd: data.motd?.clean || data.motd?.raw || ''
+    };
+}
+
+// Обновление статуса на странице
+function updateServerStatus(serverData) {
     if (!statusElement || !playersElement || !versionElement) {
         console.error('Элементы DOM не найдены');
         return;
     }
     
-    if (data.online) {
+    if (serverData.online) {
         // Сервер онлайн
-        statusElement.innerHTML = '<span style="color: #4CAF50;">● Онлайн</span>';
+        statusElement.innerHTML = '<span style="color: #4CAF50; font-weight: bold;">● Онлайн</span>';
+        playersElement.textContent = `${serverData.players.online}/${serverData.players.max}`;
+        versionElement.textContent = serverData.version;
         
-        const playersOnline = data.players?.online || 0;
-        const playersMax = data.players?.max || 0;
-        playersElement.textContent = `${playersOnline}/${playersMax}`;
-        
-        versionElement.textContent = data.version || 'Неизвестно';
-        
-        // Дополнительная информация если есть
-        if (data.players && data.players.list && data.players.list.length > 0) {
-            console.log('Игроки онлайн:', data.players.list);
+        // Показываем дополнительную информацию если есть
+        if (serverData.motd && serverData.motd.trim() !== '') {
+            showMotd(serverData.motd);
         }
         
     } else {
         // Сервер офлайн
-        statusElement.innerHTML = '<span style="color: #f44336;">● Офлайн</span>';
+        statusElement.innerHTML = '<span style="color: #f44336; font-weight: bold;">● Офлайн</span>';
         playersElement.textContent = '0/0';
         versionElement.textContent = 'Недоступно';
     }
@@ -153,32 +182,27 @@ function updateServerStatus(data) {
     hideErrorMessages();
 }
 
-// Обновление статуса из альтернативного API mcstatus.io
-function updateServerStatusFromMcStatus(data) {
-    if (!statusElement || !playersElement || !versionElement) return;
+// Показать MOTD (описание сервера)
+function showMotd(motd) {
+    // Удаляем старый MOTD если есть
+    const oldMotd = document.getElementById('server-motd');
+    if (oldMotd) oldMotd.remove();
     
-    if (data.online) {
-        statusElement.innerHTML = '<span style="color: #4CAF50;">● Онлайн</span>';
-        
-        const playersOnline = data.players?.online || 0;
-        const playersMax = data.players?.max || 0;
-        playersElement.textContent = `${playersOnline}/${playersMax}`;
-        
-        versionElement.textContent = data.version?.name_clean || data.version?.name || 'Неизвестно';
-        
-    } else {
-        statusElement.innerHTML = '<span style="color: #f44336;">● Офлайн</span>';
-        playersElement.textContent = '0/0';
-        versionElement.textContent = 'Недоступно';
-    }
+    const motdElement = document.createElement('div');
+    motdElement.id = 'server-motd';
+    motdElement.style.marginTop = '8px';
+    motdElement.style.fontSize = '12px';
+    motdElement.style.color = '#888';
+    motdElement.style.fontStyle = 'italic';
+    motdElement.textContent = `"${motd}"`;
     
-    hideErrorMessages();
+    statusElement.appendChild(motdElement);
 }
 
 // Показать состояние загрузки
 function showLoadingState() {
     if (statusElement) {
-        statusElement.innerHTML = '<span style="color: #FF9800;">● Загрузка...</span>';
+        statusElement.innerHTML = '<span style="color: #FF9800;">● Проверка...</span>';
     }
     if (playersElement) {
         playersElement.textContent = '...';
@@ -191,24 +215,21 @@ function showLoadingState() {
 // Показать состояние ошибки
 function showErrorState() {
     if (statusElement) {
-        statusElement.innerHTML = '<span style="color: #FF9800;">● Ошибка подключения</span>';
+        statusElement.innerHTML = '<span style="color: #FF9800;">● Недоступно</span>';
         
-        // Добавляем сообщение об ошибке
         const errorMessage = document.createElement('div');
         errorMessage.id = 'error-message';
         errorMessage.style.color = '#ff6b6b';
-        errorMessage.style.marginTop = '10px';
-        errorMessage.style.fontSize = '14px';
+        errorMessage.style.marginTop = '8px';
+        errorMessage.style.fontSize = '12px';
         errorMessage.style.fontWeight = 'normal';
-        errorMessage.innerHTML = 'Не удалось получить статус сервера<br><small>Попробуйте обновить страницу</small>';
+        errorMessage.textContent = 'Сервер не отвечает';
         
-        // Убираем старые сообщения об ошибках
         hideErrorMessages();
-        
         statusElement.appendChild(errorMessage);
     }
     
-    if (playersElement) playersElement.textContent = 'Н/Д';
+    if (playersElement) playersElement.textContent = '?/?';
     if (versionElement) versionElement.textContent = 'Н/Д';
 }
 
@@ -222,120 +243,69 @@ function hideErrorMessages() {
 
 // Добавить кнопку обновления
 function addRefreshButton() {
-    // Удаляем старую кнопку если есть
     const existingButton = document.getElementById('refresh-status-btn');
-    if (existingButton) {
-        existingButton.remove();
-    }
+    if (existingButton) return;
     
-    // Создаем новую кнопку
     const refreshButton = document.createElement('button');
     refreshButton.id = 'refresh-status-btn';
-    refreshButton.innerHTML = '🔄 Обновить статус';
-    refreshButton.style.marginTop = '15px';
-    refreshButton.style.padding = '8px 16px';
-    refreshButton.style.backgroundColor = '#2196F3';
+    refreshButton.innerHTML = '🔄 Обновить';
+    refreshButton.style.marginTop = '10px';
+    refreshButton.style.padding = '6px 12px';
+    refreshButton.style.backgroundColor = '#666';
     refreshButton.style.color = 'white';
     refreshButton.style.border = 'none';
-    refreshButton.style.borderRadius = '4px';
+    refreshButton.style.borderRadius = '3px';
     refreshButton.style.cursor = 'pointer';
-    refreshButton.style.fontSize = '14px';
-    refreshButton.style.transition = 'background-color 0.3s';
+    refreshButton.style.fontSize = '12px';
+    refreshButton.style.transition = 'background-color 0.2s';
     
-    // Эффект при наведении
     refreshButton.onmouseover = function() {
-        this.style.backgroundColor = '#1976D2';
+        this.style.backgroundColor = '#555';
     };
     refreshButton.onmouseout = function() {
-        this.style.backgroundColor = '#2196F3';
+        this.style.backgroundColor = '#666';
     };
     
-    // Обработчик клика
     refreshButton.onclick = function() {
-        refreshButton.innerHTML = '⏳ Обновление...';
+        refreshButton.innerHTML = '⏳ ...';
         refreshButton.disabled = true;
         
         fetchServerStatus().finally(() => {
             setTimeout(() => {
-                refreshButton.innerHTML = '🔄 Обновить статус';
+                refreshButton.innerHTML = '🔄 Обновить';
                 refreshButton.disabled = false;
             }, 1000);
         });
     };
     
-    // Добавляем кнопку в подходящее место
-    const statusContainer = document.querySelector('.server-status-container') || 
-                           document.querySelector('.status-container') || 
-                           statusElement?.parentNode;
-    
+    const statusContainer = statusElement?.parentNode;
     if (statusContainer) {
         statusContainer.appendChild(refreshButton);
-    } else {
-        console.warn('Не найден контейнер для кнопки обновления');
     }
 }
 
 // Запуск автоматического обновления
 function startAutoRefresh() {
-    console.log(`Автообновление запущено (интервал: ${REFRESH_INTERVAL/1000} сек)`);
-    
-    setInterval(() => {
-        console.log('Автоматическое обновление статуса...');
-        fetchServerStatus();
-    }, REFRESH_INTERVAL);
+    console.log('Автообновление запущено');
+    setInterval(fetchServerStatus, REFRESH_INTERVAL);
 }
 
-// Функция для ручного обновления (можно вызвать из консоли)
+// Функция для ручного обновления
 function refreshServerStatus() {
     console.log('Ручное обновление статуса');
     fetchServerStatus();
 }
 
-// Инициализация других компонентов страницы
-function initPageComponents() {
-    // Здесь может быть код для инициализации других элементов страницы
-    console.log('Инициализация компонентов страницы...');
-    
-    // Добавляем стили для улучшенного отображения
-    addCustomStyles();
-}
-
-// Добавление кастомных стилей
-function addCustomStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .status-loading {
-            color: #FF9800 !important;
-            font-style: italic;
-        }
-        .status-online {
-            color: #4CAF50 !important;
-            font-weight: bold;
-        }
-        .status-offline {
-            color: #f44336 !important;
-            font-weight: bold;
-        }
-        .status-error {
-            color: #FF9800 !important;
-            font-weight: bold;
-        }
-        #refresh-status-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-    `;
-    document.head.appendChild(style);
-}
-
 // Показываем версию скрипта в консоли
-console.log('Minecraft Server Status Script v2.0 loaded');
+console.log('Minecraft Server Status Script v3.0 loaded - Multi-API version');
 
 // Делаем функции доступными глобально (для отладки)
 window.refreshServerStatus = refreshServerStatus;
-window.getServerConfig = () => ({ ip: SERVER_IP, port: SERVER_PORT });
+window.getServerStatus = fetchServerStatus;
 
-// Обработчик ошибок страницы
-window.addEventListener('error', function(e) {
-    console.error('Глобальная ошибка:', e.error);
+// Обработчик видимости страницы - обновляем при возвращении на вкладку
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        fetchServerStatus();
+    }
 });
